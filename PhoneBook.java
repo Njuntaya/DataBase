@@ -6,9 +6,19 @@ class PhoneBook {
       private String number;
       
       PhoneBook(String name , String surName , String number) {
-         this.name = name ;
-         this.surName = surName;
-         this.number = number;
+         if(name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        if(surName == null || surName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Surname cannot be null or empty");
+        }
+        if(number == null ) {
+            throw new IllegalArgumentException("Number must be digits only and not null");
+        }
+
+         this.name = name.trim() ;
+         this.surName = surName.trim();
+         this.number = number.trim();
       } 
       
       String getName() {
@@ -21,9 +31,6 @@ class PhoneBook {
       
       String getNumber() {
           return this.number;
-      }
-      String getRecord() {
-          return this.name + "  " + this.surName + "  " + this.number; 
       }
  }
     

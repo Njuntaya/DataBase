@@ -66,7 +66,7 @@ public class Main {
                 case 4: System.out.println(">Delete");
                        int choiceDelete = input.nextInt();
                             input.nextLine();
-                            l.delete(choiceDelete);
+                            l.delete(choiceDelete - 1);
                             break;
                             
                 case 5: System.out.println(">Search");
@@ -100,6 +100,7 @@ public class Main {
                         break;
           
             }
+
         }
         input.close();
     }

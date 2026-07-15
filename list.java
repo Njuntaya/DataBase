@@ -25,10 +25,15 @@ class list {
      }
      
      void delete(int index) {
+
+        if(index < 0 || index >= this.count) {
+            System.out.println("input the collect choice number");
+            return;
+        }
          
          if(!isEmpthy()) {
-            for(int i = index ; i < count - 1 ; i++) {
-               PhoneBook Member = da.getArrAt(i + 1);
+            for(int i = index ; i < count - 1 ; i++) { 
+               PhoneBook Member = da.getArrAt(i + 1); 
                da.arrSet(i, Member);
             }
             count -- ;
@@ -98,7 +103,10 @@ class list {
          if(!isEmpthy()){
             for(int i = 0 ; i < count ; i++) {
                 PhoneBook Member = da.getArrAt(i);               
-                System.out.println("Member: " + (i + 1) + "Name:  " + Member.getName() + "    " + Member.getSurName() + "    " + Member.getNumber());
+                System.out.println("Member: " + (i + 1) + "Name:  " 
+                + Member.getName() + "    "
+                + Member.getSurName() + "    "
+                + Member.getNumber());
             }
          }
          else {
@@ -109,5 +117,7 @@ class list {
      boolean isEmpthy() {
          return this.count == 0 ;
      }
+
+     
      
 }

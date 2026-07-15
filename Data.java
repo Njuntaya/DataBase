@@ -4,15 +4,36 @@ class Data {
     private PhoneBook ph[] ;
     
     Data(int SizeArr) {
-        this.ph = new PhoneBook[SizeArr];
+
+        if(SizeArr < 0 ) {
+            System.out.println("please input size Arr");
+        }
+        else {
+            this.ph = new PhoneBook[SizeArr];
+        }
+
     }   
     
     PhoneBook getArrAt(int index) {
-        return this.ph[index];
+        if(index < 0 || index >= this.ph.length){
+            System.out.println("Input the correct Index");
+            return null;
+        }
+        else {
+            return this.ph[index];
+        }
     }
     
     void addMember(PhoneBook record , int index) {
-        this.ph[index] = record;
+        if(index < 0 || index >= this.ph.length){
+            System.out.println("Input the correct Index");
+        }
+        else if (record == null) {
+            System.out.println("cant set null value");
+        }
+        else {
+            this.ph[index] = record;
+        }
     }
     
     int getLength() {
@@ -20,7 +41,15 @@ class Data {
     }
     
     void arrSet(int index , PhoneBook set) {
-        this.ph[index] = set ;
+         if(index < 0 || index >= this.ph.length){
+            System.out.println("Input the correct Index");
+        }
+           else if (set == null) {
+            System.out.println("cant set null value");
+        }
+         else {
+            this.ph[index] = set ;
+        }
     }
 
 
