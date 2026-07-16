@@ -93,7 +93,73 @@ class list {
              System.out.println("Sorry the Member is Epmthy!");
          }
     }
-    
+
+    void editName(int index , String nameFix) {
+
+        if(index < 0 || index >= count) {
+            System.out.println("error index please input the correct index");
+        }
+
+        if(nameFix == null || nameFix.trim().isEmpty() ){
+            System.out.println("Error plese input name for fix");
+        }
+
+        if(!isEmpthy()) {
+            PhoneBook memberTemp = da.getArrAt(index);
+            memberTemp.editName(nameFix);
+            System.out.println("Edit successful!");
+            da.arrSet(index, memberTemp);
+        }
+        else {
+            System.out.println("the Member is empty");
+        }
+
+    }
+
+    void editSurName(int index , String surName) {
+
+        if(index < 0 || index >= count) {
+            System.out.println("error index please input the correct index");
+        }
+
+        if(surName == null || surName.trim().isEmpty() ){
+            System.out.println("Error plese input name for fix");
+        }
+
+        if(!isEmpthy()) {
+            PhoneBook memberTemp = da.getArrAt(index);
+            memberTemp.editSurName(surName);
+            System.out.println("Edit successful!");
+            da.arrSet(index, memberTemp);
+        }
+        else {
+            System.out.println("the Member is empty");
+        }
+
+    }
+
+    void editnumber(int index , String number) {
+        
+        if(index < 0 || index >= count) {
+            System.out.println("error index please input the correct index");
+        }
+
+        if(number == null || number.trim().isEmpty() ){
+            System.out.println("Error plese input name for fix");
+        }
+
+        if(!isEmpthy()) {
+            PhoneBook memberTemp = da.getArrAt(index);
+            memberTemp.editNumber(number);
+            System.out.println("Edit successful!");
+            da.arrSet(index, memberTemp);
+        }
+        else {
+            System.out.println("the Member is empty");
+        }
+
+    }
+
      
      boolean isFull() {
          return this.count == this.da.getLength();

@@ -5,13 +5,8 @@ class Data {
     
     Data(int SizeArr) {
 
-        if(SizeArr < 0 ) {
-            System.out.println("please input size Arr");
-        }
-        else {
             this.ph = new PhoneBook[SizeArr];
-        }
-
+            
     }   
     
     PhoneBook getArrAt(int index) {

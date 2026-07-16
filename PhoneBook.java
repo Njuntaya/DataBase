@@ -32,6 +32,18 @@ class PhoneBook {
       String getNumber() {
           return this.number;
       }
+
+      void editName(String namefix) {
+        this.name = namefix ;
+      }
+
+      void editSurName(String surNameFix) {
+        this.surName = surNameFix ;
+      }
+
+      void editNumber(String numberFix) {
+        this.number = numberFix;
+      }
  }
     
     
