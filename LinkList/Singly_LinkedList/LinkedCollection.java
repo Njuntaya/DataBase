@@ -72,5 +72,11 @@ public class LinkedCollection {
             }
     }
 
+    void insert(int order) {
+        if(order == 1 ) {
+            
+        }
+    }
+
 }
 
