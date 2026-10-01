@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvelous Sorting Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap');
+
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #111 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            color: #e23636;
+            font-size: 4rem;
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #000;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #f78f3f;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .input-area {
+            background: #fff;
+            border: 4px solid #e23636;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 8px 8px 0px #518cca;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: #222;
+            color: #00ff00;
+            border: none;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        button {
+            font-family: 'Bangers', cursive;
+            background-color: #e23636;
+            color: white;
+            border: 3px solid #fff;
+            padding: 15px 40px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 4px 4px 0px #f78f3f;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #f78f3f;
+        }
+
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #f78f3f;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            border: 4px solid #518cca;
+            box-shadow: 8px 8px 0px #e23636;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MARVELOUS SORTING BATTLE!</h1>
+        <div class="subtitle">"With great data, comes great processing time..." - Uncle Ben (probably)</div>
+        
+        <div class="input-area">
+            <h3 style="color: #333; font-family: 'Bangers', cursive; font-size: 1.5rem; margin-top:0;">Paste your battle logs here!</h3>
+            <textarea id="dataInput" placeholder="Bubble: 2.477 ms | Insertion: 1.056 ms | Selection: 1.261 ms | Quick: 0.130 ms
+Bubble: 1.316 ms | Insertion: 0.694 ms | Selection: 2.067 ms | Quick: 0.113 ms..."></textarea>
+            <br>
+            <button onclick="generateChart()">ASSEMBLE GRAPH!</button>
+        </div>
+
+        <div class="chart-container" style="display: none;" id="chartContainer">
+            <canvas id="sortChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        function generateChart() {
+            const input = document.getElementById('dataInput').value.trim();
+            if (!input) {
+                alert("Hold up, Avenger! You need to paste the data first!");
+                return;
+            }
+
+            const lines = input.split('\n').filter(line => line.trim() !== '');
+            const sizes = ['500', '1000', '10000', '50000', '100000']; 
+            
+            const datasets = {
+                'Bubble': [],
+                'Insertion': [],
+                'Selection': [],
+                'Quick': []
+            };
+
+            lines.forEach(line => {
+                const parts = line.split('|');
+                parts.forEach(part => {
+                    const [name, timeStr] = part.split(':');
+                    if (name && timeStr) {
+                        const cleanName = name.trim();
+                        const time = parseFloat(timeStr.replace('ms', '').trim());
+                        if (datasets[cleanName] !== undefined) {
+                            datasets[cleanName].push(time);
+                        }
+                    }
+                });
+            });
+
+            const chartLabels = sizes.slice(0, lines.length);
+
+            const colors = {
+                'Bubble': { border: '#e23636', bg: 'rgba(226, 54, 54, 0.2)' }, // Iron Man
+                'Insertion': { border: '#518cca', bg: 'rgba(81, 140, 202, 0.2)' }, // Captain America
+                'Selection': { border: '#00ff00', bg: 'rgba(0, 255, 0, 0.2)' }, // Hulk
+                'Quick': { border: '#f78f3f', bg: 'rgba(247, 143, 63, 0.2)' } // Doctor Strange
+            };
+
+            const chartDatasets = Object.keys(datasets).map(algo => {
+                return {
+                    label: algo + ' Sort',
+                    data: datasets[algo],
+                    borderColor: colors[algo].border,
+                    backgroundColor: colors[algo].bg,
+                    borderWidth: 3,
+                    pointBackgroundColor: colors[algo].border,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    tension: 0.3
+                };
+            });
+
+            document.getElementById('chartContainer').style.display = 'block';
+            const ctx = document.getElementById('sortChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels.map(s => s + ' Elements'),
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: 'Bangers',
+                                    size: 18
+                                },
+                                color: '#333'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'ALGORITHM ENDGAME: TIME COMPLEXITY',
+                            font: {
+                                family: 'Bangers',
+                                size: 24
+                            },
+                            color: '#e23636'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Time (ms)',
+                                font: { weight: 'bold' }
+                            },
+                            type: 'logarithmic',
+                            grid: { color: '#ccc' }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Array Size',
+                                font: { weight: 'bold' }
+                            },
+                            grid: { color: '#ccc' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
